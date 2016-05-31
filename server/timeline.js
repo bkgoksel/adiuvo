@@ -52,7 +52,7 @@ Meteor.methods({
 
 			//Master timeline
 			Meteor.call('updateState',{"status.currentTime" : ct });
-			ct += interval / 100;	
+			ct += interval / 100;
 
 			if ( events.length > eventIndex && ct>events[eventIndex].arriveTime ) {
 
@@ -78,7 +78,7 @@ Meteor.methods({
 					var colorWhite = "" + events[eventIndex].colorWhite * 10;
 					colorWhite = pad.substring(0, pad.length - colorWhite.length) + colorWhite;
 
-					var message = animation + startLed + endLed + duration + colorRed + colorGreen + colorBlue + colorWhite + "."; 
+					var message = animation + startLed + endLed + duration + colorRed + colorGreen + colorBlue + colorWhite + ".";
 					console.log(message);
 
 					Meteor.call("sendToLed", message );
@@ -87,7 +87,7 @@ Meteor.methods({
 
 				//Street names events
 				if (events[eventIndex].type === 'street') {
-					
+
 					console.log("street event : ");
 					console.log(events[eventIndex]);
 					Meteor.call('updateState',{
@@ -95,13 +95,18 @@ Meteor.methods({
 							name : events[eventIndex].name,
 							src : events[eventIndex].filename,
 							visible : true,
+                            animation_length: 20, // This animation length needs to be dynamically computed by looking at the next sign/
 						}
 					});
-					Meteor.setTimeout(function(){ 
-						Meteor.call('updateState',{"status.street.visible" : false });
-					},  
-					events[eventIndex].duration * 1000
+                    console.log('emitted new sign');
+                    Streamy.broadcast('new_sign', {});
+                    // TODO: is this even necessary? Shouldn't it update automatically?
+					/*Meteor.setTimeout(function(){
+                            Meteor.call('updateState',{"status.street.visible" : false });
+                        },
+                        events[eventIndex].duration * 1000
 					);
+                    */
 				}
 
 				eventIndex++;

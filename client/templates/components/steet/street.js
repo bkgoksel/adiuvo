@@ -1,17 +1,19 @@
+import { ReactiveVar } from 'meteor/reactive-var'
+
 var SIGN_SCALE = 10;
 var IMAGE_SCALE = 10;
+var tmpl;
 
 Template.street.onCreated(function() {
     this.sign_scale = new ReactiveVar( SIGN_SCALE );
     this.image_scale = new ReactiveVar( IMAGE_SCALE );
     this.image_top = new ReactiveVar( 0 );
     this.sign_top = new ReactiveVar( 0 );
+    tmpl = this;
 });
 
-Template.street.onRendered(function() {
-    center_sign();
-    this.image_top.set( image_top() );
-    this.sign_top.set( sign_top() );
+Streamy.on('new_sign', (d) => {
+    play();
 });
 
 Template.street.helpers({
@@ -31,29 +33,38 @@ Template.street.helpers({
 		var state = State.findOne({name: 'state'})
 		return state && state.status.street.visible;
 	},
+    animation_length: function(){
+        var state = State.findOne({name: 'state'});
+        return state && state.status.street.animation_length;
+    },
     sign_scale: function(){
-        return this.sign_scale.get();
+        var scale = Template.instance().sign_scale.get();
+        console.log("scl:");
+        console.log(scale);
+        return scale;
     },
     image_scale: function(){
-        return this.image_scale.get();
+        return Template.instance().image_scale.get();
     },
     image_top: function(){
-        return this.image_top.get();
+        return Template.instance().image_top.get();
     },
     sign_top: function(){
-        return this.sign_top.get();
+        return Template.instance().sign_top.get();
     },
 });
 
 center_sign = function () {
-    center_obj('.streetname');
-    center_obj('.streetimage');
+    center_obj('streetname');
+    center_obj('streetimage');
 }
 
-centerObj = function (classname) {
+center_obj = function (classname) {
     var width = $(document).width();
     var left = width/2 - $('.'+classname).width()/2;
     $('.'+classname).css('left', left);
+    console.log('centered this obj: ');
+    console.log($('.'+classname));
 }
 
 image_top = function () {
@@ -67,4 +78,12 @@ sign_top = function () {
     var sign_height = $('.streetname').outerHeight();
 
     return ((image_top()*IMAGE_SCALE) - (sign_height*SIGN_SCALE))/SIGN_SCALE;
+}
+
+play = function () {
+    center_sign();
+    console.log(tmpl);
+    tmpl.image_top.set( image_top() );
+    tmpl.sign_top.set( sign_top() );
+    $('.inner').addClass('grow');
 }

@@ -1,23 +1,63 @@
 <template name="street">
 
-    <style>
+    <style type='text/css'>
+
+        @font-face {
+            font-family: 'signFont';
+            src: url('public/roadway.tff') format('truetype');
+        }
+
+        .streetname {
+          display:inline-block;
+          background-color:#308446;
+          color:white;
+          font-family:signFont;
+          font-family: Arial;
+          font-weight:bold;
+          font-size:80%;
+          border-radius:1px;
+          border-style:solid;
+          border-color:#fff;
+          border-width:1px; 
+          margin-left:-10px;
+          padding-left:10px;
+          padding-right:10px;
+        }
+
+        .streetimage {
+          height:4%;
+        }
+
+        .outer {
+          width:100%;
+          height:100%;
+        /*   text-align:center; */
+        }
+
+        .inner {
+          opacity:0.4;
+          position:fixed;
+          -webkit-transition:{{{animation_length}}}s;
+          transition:{{{animation_length}}}s;
+        }
+
         .grow.streetimage {
-            opacity: 1.0;
-            -webkit-transform: scale({{ image_scale }}) translateY({{ image_top }});
-            transform: scale({{ image_scale }}) translateY({{ image_top }});
+            opacity:1.0;
+            -webkit-transform:scale({{image_scale}}) translateY({{image_top}});
+            transform:scale({{image_scale}}) translateY({{image_top}});
         };
 
         .grow.streetname {
             opacity: 1.0;
-            -webkit-transform: scale({{ sign_scale }}) translateY({{ sign_top }});
-            transform: scale({{ sign_scale }}) translateY({{ sign_top }});
+            -webkit-transform: scale({{sign_scale}}) translateY({{sign_top}});
+            transform: scale({{sign_scale}}) translateY({{sign_top}});
         }
     </style>
 
 	{{#if visible}}
 	<div id="street" class="outer">
-		<div class='streetname inner {{ street_name }}'>{{ name }}</div>
-		<img class='streetimage inner {{ street_name }}' src='{{ src }}'>
+		<div class='streetname inner {{street_name}}'>{{name}}</div>
+		<img class='streetimage inner {{street_name}}' src='{{src}}'>
 	</div>
 	{{/if}}
 </template>

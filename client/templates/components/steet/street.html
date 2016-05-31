@@ -1,4 +1,19 @@
 <template name="street">
+
+    <style>
+        .grow.streetimage {
+            opacity: 1.0;
+            -webkit-transform: scale({{ image_scale }}) translateY({{ image_top }});
+            transform: scale({{ image_scale }}) translateY({{ image_top }});
+        };
+
+        .grow.streetname {
+            opacity: 1.0;
+            -webkit-transform: scale({{ sign_scale }}) translateY({{ sign_top }});
+            transform: scale({{ sign_scale }}) translateY({{ sign_top }});
+        }
+    </style>
+
 	{{#if visible}}
 	<div id="street" class="outer">
 		<div class='streetname inner {{ street_name }}'>{{ name }}</div>

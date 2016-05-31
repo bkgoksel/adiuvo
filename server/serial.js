@@ -1,3 +1,4 @@
+/**
 Meteor.startup(function() {
 	ledSerialPort = new SerialPort.SerialPort('/COM3', {
 		baudrate: 4800,
@@ -52,3 +53,5 @@ Meteor.methods({
 		return message;
 	},
 });  
+*/
+
